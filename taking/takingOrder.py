@@ -7,7 +7,7 @@ from taking.requestMethod import *
 
 TKdict = {
     'areaCode': '0315',
-    'isCount': False,
+    'isCount': True,
     'procTK': {
         'date': '2016-06-06 10:35:21',
         'express': {
