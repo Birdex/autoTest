@@ -2,8 +2,8 @@
 import json
 import time
 
-from taking.now import now
-from taking.requestMethod import *
+from birdex_v2.now import now
+from birdex_v2.requestMethod import post,get
 
 TKdict = {
     'areaCode': '0315',

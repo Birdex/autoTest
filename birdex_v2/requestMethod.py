@@ -17,32 +17,32 @@ def post(params, ip='192.168.1.197:8080', path='/OmsMaster/Taking/'):
     conn.close()
 
 
-def get(orderNo):
+def get(params, ip='192.168.1.197:8080', path='/OmsMaster/Taking/'):
     try:
-        conn = http.client.HTTPConnection(config.url)
-        conn.request("GET", config.path + orderNo)
+        conn = http.client.HTTPConnection(ip)
+        conn.request("GET", path + params)
         reponse = conn.getresponse()
     except http.client.HTTPException:
         print(http.client.HTTPException)
     if reponse.status == 200:
         return reponse.read().decode(encoding='utf-8', errors='strict')
     else:
-        return {'serverError': 'serverBug'}
         print(reponse.read())
+        return {'serverError': 'serverBug'}
     conn.close()
 
 
-def put(params, orderNo):
+def put(params, orderNo, ip='192.168.1.197:8080', path='/OmsMaster/Taking/'):
     try:
-        conn = http.client.HTTPConnection(config.url)
+        conn = http.client.HTTPConnection(ip)
         headers = {"Content-type": "application/json"}
-        conn.request("PUT", config.path + orderNo, params, headers)
+        conn.request("PUT", path + orderNo, params, headers)
         reponse = conn.getresponse()
     except http.client.HTTPException:
         print(http.client.HTTPException)
     if reponse.status == 200:
         return reponse.read().decode(encoding='utf-8', errors='strict')
     else:
-        return {'serverError': 'serverBug'}
         print(reponse.read())
+        return {'serverError': 'serverBug'}
     conn.close()

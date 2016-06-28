@@ -19,7 +19,7 @@ def Testfunc():
     # print(json.dumps(dict_upResult,ensure_ascii=False,indent=2))
     dict_takeOrder['isCount'] = True
     postResult = post(json.dumps(dict_takeOrder))
-    print("taking result:", postResult)
+    print("singleTest result:", postResult)
     dict_postResult = json.loads(postResult)
     if ('orderNo' in postResult) & (dict_postResult['result'] == 'success'):
         report['resultBasic']['omsOrderNo'] = dict_postResult['orderNo']

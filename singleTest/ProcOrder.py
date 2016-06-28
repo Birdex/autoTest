@@ -4,8 +4,8 @@ import http.client
 import json
 import time
 
-from procOrder.now import now
-from procOrder.requestMethod import *
+from birdex_v2.now import now
+from birdex_v2.requestMethod import *
 
 POdict = {
     'deliverType': 'standard',
@@ -74,11 +74,11 @@ POdict = {
 POdict['procPr']['parcel']['no'] = 'XST'+ str(now())
 params = json.dumps(POdict)
 # print(json.dumps(POdict, ensure_ascii=False, indent=4))
-postResult = json.loads(post(params))
+postResult = json.loads(post(params, '192.168.1.197:8080', '/OmsMaster/ProcOrder/'))
 print("postResult:" + json.dumps(postResult, ensure_ascii=False))
 time.sleep(0.1)
 if 'orderNo' in postResult:
-    getResult = json.loads(get(postResult['orderNo']))
+    getResult = json.loads(get(postResult['orderNo'], path='/OmsMaster/ProcOrder/'))
     print("getResult:" + json.dumps(getResult, ensure_ascii=False))
 else:
     print(postResult)

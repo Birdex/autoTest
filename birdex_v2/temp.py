@@ -17,10 +17,10 @@ print(dict_upResult)
 print(json.dumps(dict_upResult, ensure_ascii=False, indent= 2))
 
 postResult1 = post(json.dumps(dict_upResult), path='/OmsAgent/TakeReport/')
-print("taking result:", postResult1)
+print("singleTest result:", postResult1)
 # dict_postResult = eval(postResult)
 # if ('orderNo' in postResult) & (dict_postResult['result'] == 'success'):
 #     dict_upResult['resultBasic']['omsOrderNo'] = dict_postResult['orderNo']
 #     print(json.dumps(dict_upResult, ensure_ascii=False))
 #     postResult1 = post(json.dumps(dict_upResult), ip='192.168.1.197:8080', path='/OmsAgent/TakeReport')
-#     print("taking warehouse result:", postResult1)
+#     print("singleTest warehouse result:", postResult1)

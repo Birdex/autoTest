@@ -17,7 +17,7 @@ def testFunc1():
     dict_takeOrder['procTK']['express']['no'] = 'XST' + str(now())
     dict_takeOrder['isCount'] = True
     postResult = post(json.dumps(dict_takeOrder))
-    print("taking result:", postResult)
+    print("singleTest result:", postResult)
     dict_postResult = json.loads(postResult)
     if ('orderNo' in postResult) & (dict_postResult['result'] == 'success'):
         report['resultBasic']['omsOrderNo'] = dict_postResult['orderNo']
