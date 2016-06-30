@@ -3,7 +3,7 @@ import json
 
 import time
 
-from birdex_v2.readFile import read
+from birdex_v2.readFile import read, readTemp
 from birdex_v2.now import now
 from birdex_v2.requestMethod import post
 
@@ -18,7 +18,7 @@ dict_takeOrder['procTK']['express']['no'] = 'XST' + str(now())
 # 揽收成功，揽收清点成功
 dict_takeOrder['isCount'] = True
 postResult = post(json.dumps(dict_takeOrder))
-print("singleTest result:", postResult)
+print("TakeTest result:", postResult)
 dict_postResult = json.loads(postResult)
 if ('orderNo' in postResult) & (dict_postResult['result'] == 'success'):
     report['resultBasic']['omsOrderNo'] = dict_postResult['orderNo']

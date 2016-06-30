@@ -7,8 +7,8 @@ from birdex_v2.requestMethod import post
 
 
 def setUp():
+    # 揽收单isCount，揽收失败fail，揽收清点操作success
     time.sleep(0.5)
-# 需要清点的揽收单，揽收失败
 def Testfunc2():
     # 读取揽收和揽收结果数据格式
     dict_takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
@@ -18,24 +18,25 @@ def Testfunc2():
     dict_takeOrder['procTK']['express']['no'] = 'XST' + str(now())
     dict_takeOrder['isCount'] = True
     postResult = post(json.dumps(dict_takeOrder))
-    print("singleTest result:", postResult)
+    print("Take result:", postResult)
     dict_postResult = json.loads(postResult)
     if ('orderNo' in postResult) & (dict_postResult['result'] == 'success'):
         report['resultBasic']['omsOrderNo'] = dict_postResult['orderNo']
-        report['resultBasic']['result'] = 'failure'
+        report['resultBasic']['result'] = 'fail'
         time.sleep(0.1)
         postResult = post(json.dumps(report), ip='192.168.1.197:8080', path='/OmsAgent/TakeReport/')
         print("TakeReport result:", postResult)
         dict_postResult = json.loads(postResult)
-        if dict_postResult['result'] == 'fail':
-            assert True
-        else:
+        if dict_postResult['result'] == 'success':
             report['resultBasic']['result'] = 'success'
             time.sleep(0.1)
             postResult = post(json.dumps(report), ip='192.168.1.197:8080', path='/OmsAgent/TakingCountingReport/')
             print("TakeCountReport result:", postResult)
             dict_postResult = json.loads(postResult)
-            assert dict_postResult['result'] == 'fail'
+            assert dict_postResult['result'] != 'success'
+        else:
+            print('TakeReport fail')
+            assert False
     else:
         print("TakeCreate fail")
         assert False

@@ -105,4 +105,4 @@ if 'orderNo' in postResult:
     getResult = json.loads(get(postResult['orderNo']))
     print("getResult:" + json.dumps(getResult, ensure_ascii=False))
 else:
-    print(postResult)
+    print('test fail')
