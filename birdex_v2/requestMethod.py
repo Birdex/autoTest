@@ -46,3 +46,7 @@ def put(params, orderNo, ip='192.168.1.197:8080', path='/OmsMaster/Taking/'):
         print(reponse.read())
         return {'serverError': 'serverBug'}
     conn.close()
+
+
+if  __name__ == '__main__':
+    put()
