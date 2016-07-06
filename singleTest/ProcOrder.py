@@ -4,7 +4,7 @@ import http.client
 import json
 import time
 
-from birdex_v2.now import now
+from birdex_v2.localTime import localTimeNum
 from birdex_v2.requestMethod import *
 
 POdict = {
@@ -71,7 +71,7 @@ POdict = {
     },
     'warehouse': 'TM'
 }
-POdict['procPr']['parcel']['no'] = 'XST'+ str(now())
+POdict['procPr']['parcel']['no'] = 'XST'+ str(localTimeNum())
 params = json.dumps(POdict)
 # print(json.dumps(POdict, ensure_ascii=False, indent=4))
 postResult = json.loads(post(params, '192.168.1.197:8080', '/OmsMaster/ProcOrder/'))

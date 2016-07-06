@@ -2,7 +2,7 @@
 import json
 import time
 
-from birdex_v2.now import now
+from birdex_v2.localTime import localTimeNum
 from birdex_v2.requestMethod import post,get
 
 TKdict = {
@@ -95,7 +95,7 @@ TKdict = {
 }
 # print(json.dumps(tkdict,ensure_ascii=False,indent=4))
 TKdict['procTK']['date'] = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
-TKdict["procTK"]["express"]["no"] = 'XST' + str(now())
+TKdict["procTK"]["express"]["no"] = 'XST' + str(localTimeNum()) + random.choice('ASDFGHJKLQWERTYUIOPZXCVBNM')
 params = json.dumps(TKdict)
 # print(json.dumps(TKdict, ensure_ascii=False, indent=4))
 postResult = json.loads(post(params))

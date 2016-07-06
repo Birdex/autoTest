@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.readFile import read, readTemp
-from birdex_v2.now import now
+from birdex_v2.IO import read, readTemp
+from birdex_v2.localTime import localTimeNum
 from birdex_v2.requestMethod import post
 
 dict_ProcOrder = readTemp('D:/workspace/BirdexTest/outOrder.txt')

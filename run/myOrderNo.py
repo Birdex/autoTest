@@ -1,5 +1,5 @@
-from birdex_v2.now import now
+from birdex_v2.localTime import  myOrderNum
 
-now = "XST" + str(now())
+order = myOrderNum()
 
-print(now)
+print(order)

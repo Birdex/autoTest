@@ -18,3 +18,9 @@ def read(path):
         str_param = f.read()
     dict_param = json.loads(str_param)
     return dict_param
+
+
+def writeTXT(params, path='result.txt'):
+    with open(path, 'a', encoding='utf-8') as f:
+        f.write(params)
+        f.write('\n')

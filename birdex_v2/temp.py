@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
 
-from birdex_v2.readFile import read
-from birdex_v2.now import now
+from birdex_v2.IO import read
+from birdex_v2.localTime import localTimeNum
 from birdex_v2.requestMethod import post
 
 # 读取揽收和揽收结果数据格式
 dict_param = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
 dict_upResult = read('D:/workspace/BirdexTest/upResult.txt')
 # 设置参数具体值
-dict_param['procTK']['express']['no'] = 'XST' + str(now())
+dict_param['procTK']['express']['no'] = 'XST' + str(localTimeNum())
 dict_upResult['parcels'] = dict_param['procTK']['parcels']
 
 print(dict_upResult['parcels'])

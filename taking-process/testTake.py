@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.readFile import read
-from birdex_v2.now import now
+from birdex_v2.IO import read
+from birdex_v2.localTime import localTimeNum
 from birdex_v2.requestMethod import post
 
 
@@ -16,7 +16,7 @@ def testFunc():
     dict_takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
     report = read('D:/workspace/BirdexTest/report.txt')
     # 设置参数具体值
-    dict_takeOrder['procTK']['express']['no'] = 'XST' + str(now())
+    dict_takeOrder['procTK']['express']['no'] = 'XST' + str(localTimeNum())
     # dict_upResult['parcels'] = dict_takeOrder['procTK']['parcels']
     # print(json.dumps(dict_upResult,ensure_ascii=False,indent=2))
     dict_takeOrder['isCount'] = True
