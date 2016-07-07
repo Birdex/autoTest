@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.readFile import read
-from birdex_v2.now import now
-from birdex_v2.requestMethod import post
+from birdexv2.IO import read
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post
 
 
 def setUp():
-    # 揽收单isCount，揽收失败fail，揽收清点操作success
+    # 揽收单isCount，揽收失败fail，揽收清点操作fail
     time.sleep(0.5)
-def Testfunc2():
+def Testfunc3():
     # 读取揽收和揽收结果数据格式
     dict_takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
     report = read('D:/workspace/BirdexTest/report.txt')
     # 设置参数具体值
     time.sleep(0.5)
-    dict_takeOrder['procTK']['express']['no'] = 'XST' + str(now())
+    dict_takeOrder['procTK']['express']['no'] = 'XST' + str(localTimeNum())
     dict_takeOrder['isCount'] = True
     postResult = post(json.dumps(dict_takeOrder))
     print("Take result:", postResult)
@@ -28,7 +28,7 @@ def Testfunc2():
         print("TakeReport result:", postResult)
         dict_postResult = json.loads(postResult)
         if dict_postResult['result'] == 'success':
-            report['resultBasic']['result'] = 'success'
+            report['resultBasic']['result'] = 'fail'
             time.sleep(0.1)
             postResult = post(json.dumps(report), ip='192.168.1.197:8080', path='/OmsAgent/TakingCountingReport/')
             print("TakeCountReport result:", postResult)

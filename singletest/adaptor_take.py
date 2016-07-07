@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.readFile import read
-from birdex_v2.now import now
-from birdex_v2.requestMethod import post, get
+from birdexv2.IO import read
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post, get
 
 # 读取揽收和揽收结果数据格式
 dict_takeOrder = read('E:/birdex/TestCases/outPort/outTakeOrder.txt')
 report = read('D:/workspace/BirdexTest/report.txt')
 # 设置参数具体值
-dict_takeOrder['tradeOrders'][0]['trackingNo'] = 'XST' + str(now())
-dict_takeOrder['tradeOrders'][0]['logisticsId'] = 'xieshitong' + str(now())
+dict_takeOrder['tradeOrders'][0]['trackingNo'] = 'XST' + str(localTimeNum())
+dict_takeOrder['tradeOrders'][0]['logisticsId'] = 'xieshitong' + str(localTimeNum())
 dict_takeOrder['occurTime'] = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
 
 postResult = post(json.dumps(dict_takeOrder), path='/OmsAdaptor/package/create/')

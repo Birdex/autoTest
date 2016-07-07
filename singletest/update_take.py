@@ -2,8 +2,8 @@
 import json
 import time
 
-from birdex_v2.now import now
-from birdex_v2.requestMethod import post,get
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post,get
 
 TKdict = {
     'areaCode': '0315',
@@ -95,7 +95,7 @@ TKdict = {
 }
 # print(json.dumps(tkdict,ensure_ascii=False,indent=4))
 TKdict['procTK']['date'] = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
-TKdict["procTK"]["express"]["no"] = 'XST' + str(now())
+TKdict["procTK"]["express"]["no"] = 'XST' + str(localTimeNum())
 params = json.dumps(TKdict)
 # print(json.dumps(TKdict, ensure_ascii=False, indent=4))
 postResult = json.loads(post(params))

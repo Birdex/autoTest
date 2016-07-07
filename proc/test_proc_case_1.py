@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.readFile import read
-from birdex_v2.now import now
-from birdex_v2.requestMethod import post
+from birdexv2.IO import read
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post
 
 
 def setUp():
@@ -22,7 +22,7 @@ def testFunc1():
     if ('orderNo' in postResult) & (dict_postResult['result'] == 'success'):
         report['resultBasic']['omsOrderNo'] = dict_postResult['orderNo']
         # 加工.分拣结果
-        report['resultBasic']['result'] = 'fail'
+        report['resultBasic']['result'] = 'success'
         time.sleep(0.1)
         postResult = post(json.dumps(report), ip='192.168.1.197:8080', path='/OmsAgent/PROrderReport/')
         print("ProcReport result:", postResult)

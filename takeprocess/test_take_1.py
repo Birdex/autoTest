@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.readFile import read
-from birdex_v2.now import now
-from birdex_v2.requestMethod import post
+from birdexv2.IO import read
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post
 
 
 def setUp():
@@ -14,7 +14,7 @@ def testFunc1():
     dict_takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
     report = read('D:/workspace/BirdexTest/report.txt')
     time.sleep(0.5)
-    dict_takeOrder['procTK']['express']['no'] = 'XST' + str(now())
+    dict_takeOrder['procTK']['express']['no'] = 'XST' + str(localTimeNum())
     dict_takeOrder['isCount'] = True
     postResult = post(json.dumps(dict_takeOrder))
     print("Take result:", postResult)
