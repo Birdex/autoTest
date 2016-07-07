@@ -29,9 +29,9 @@ def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xl
     except:
         print("no sheet in %s named Sheet1" % fileName)
     row_num = sheet.nrows
-    ncols = sheet.ncols
-    print("row_num %d, ncols %d" % (row_num, ncols))
-    takeList = []
+    col_num = sheet.ncols
+    print("row_num %d, ncols %d" % (row_num, col_num))
+    take_list = []
     takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
 
     for i in range(1, row_num):
@@ -59,9 +59,9 @@ def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xl
         takeOrder['procTK']['person']['contact']['ext']['note'] = readCell(sheet.cell(i, 21))
         takeOrder['procTK']['person']['contact']['identityCard'] = readCell(sheet.cell(i, 22))
         takeOrder['procTK']['person']['name'] = readCell(sheet.cell(i, 23))
-        takeList.append(copy.deepcopy(takeOrder))
+        take_list.append(copy.deepcopy(takeOrder))
         # print(takeOrder)
-    return takeList
+    return take_list
 
 def executeBatchTake(take_list):
     for takeOrder in take_list:
@@ -69,7 +69,7 @@ def executeBatchTake(take_list):
         postResult = json.loads(post(json.dumps(takeOrder)))
         print("postResult:" + json.dumps(postResult, ensure_ascii=False))
         writeTXT(json.dumps(postResult))
-        orderNo = postResult['orderNo']
+        order_no = postResult['orderNo']
         result = postResult['result']
         db = pg_driver.connect(database="postgres", user="postgres", password="password", host="localhost", port="5432")
         db.execute('''create table IF NOT EXISTS take_result(
@@ -78,5 +78,5 @@ def executeBatchTake(take_list):
             "takeReportResult" varchar(32), 
             "takeReportMsg" text)''')
         ps = db.prepare("insert into take_result values ($1,$2)")
-        ps(orderNo, result)
+        ps(order_no, result)
     db.close()
