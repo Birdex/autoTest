@@ -3,9 +3,9 @@ import json
 
 import time
 
-from birdex_v2.IO import read, readTemp
-from birdex_v2.localTime import localTimeNum
-from birdex_v2.requestMethod import post
+from birdexv2.IO import read, readTemp
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post
 
 # 读取揽收和揽收结果数据格式
 dict_takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')

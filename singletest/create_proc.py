@@ -4,8 +4,8 @@ import http.client
 import json
 import time
 
-from birdex_v2.localTime import localTimeNum
-from birdex_v2.requestMethod import *
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import *
 
 POdict = {
     'deliverType': 'standard',

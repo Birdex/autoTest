@@ -4,9 +4,9 @@ import postgresql.driver as pg_driver
 import xlrd
 
 
-from birdex_v2.IO import read, writeTXT
-from birdex_v2.localTime import myOrderNum
-from birdex_v2.requestMethod import post
+from birdexv2.IO import read, writeTXT
+from birdexv2.local_time import myOrderNum
+from birdexv2.request_method import post
 
 
 def readCell(cell):
@@ -22,18 +22,19 @@ def readCell(cell):
     else:
         return cell.value
 
-def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdex_v2/TKOrder.xlsx'):
+def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xlsx'):
     xls = xlrd.open_workbook(fileName)
     try:
         sheet = xls.sheet_by_name("Sheet1")
     except:
         print("no sheet in %s named Sheet1" % fileName)
-    nrows = sheet.nrows
+    row_num = sheet.nrows
     ncols = sheet.ncols
-    print("nrows %d, ncols %d" % (nrows, ncols))
+    print("row_num %d, ncols %d" % (row_num, ncols))
     takeList = []
     takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
-    for i in range(1, nrows):
+
+    for i in range(1, row_num):
         takeOrder['areaCode'] = readCell(sheet.cell(i, 0))
         takeOrder['takeType'] = readCell(sheet.cell(i, 1))
         takeOrder['warehouse'] = readCell(sheet.cell(i, 2))
@@ -58,13 +59,12 @@ def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdex_v2/TKOrder.x
         takeOrder['procTK']['person']['contact']['ext']['note'] = readCell(sheet.cell(i, 21))
         takeOrder['procTK']['person']['contact']['identityCard'] = readCell(sheet.cell(i, 22))
         takeOrder['procTK']['person']['name'] = readCell(sheet.cell(i, 23))
-        # list.append(takeOrder)
         takeList.append(copy.deepcopy(takeOrder))
         # print(takeOrder)
     return takeList
 
-def executeBatchTake(takeList):
-    for takeOrder in takeList:
+def executeBatchTake(take_list):
+    for takeOrder in take_list:
         takeOrder["procTK"]["express"]["no"] = myOrderNum()
         postResult = json.loads(post(json.dumps(takeOrder)))
         print("postResult:" + json.dumps(postResult, ensure_ascii=False))
@@ -72,6 +72,11 @@ def executeBatchTake(takeList):
         orderNo = postResult['orderNo']
         result = postResult['result']
         db = pg_driver.connect(database="postgres", user="postgres", password="password", host="localhost", port="5432")
-        db.execute('''create table IF NOT EXISTS take_result("orderNo" varchar(64), "result" text)''')
-        db.execute('''insert into take_result values (orderNo,result)''')
+        db.execute('''create table IF NOT EXISTS take_result(
+            "takeNo" varchar(32), 
+            "result" text, 
+            "takeReportResult" varchar(32), 
+            "takeReportMsg" text)''')
+        ps = db.prepare("insert into take_result values ($1,$2)")
+        ps(orderNo, result)
     db.close()

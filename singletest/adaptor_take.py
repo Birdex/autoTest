@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.IO import read
-from birdex_v2.localTime import localTimeNum
-from birdex_v2.requestMethod import post, get
+from birdexv2.IO import read
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post, get
 
 # 读取揽收和揽收结果数据格式
 dict_takeOrder = read('E:/birdex/TestCases/outPort/outTakeOrder.txt')

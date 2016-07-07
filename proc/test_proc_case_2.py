@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.IO import read
-from birdex_v2.localTime import localTimeNum
-from birdex_v2.requestMethod import post
+from birdexv2.IO import read
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post
 
 
 def setUp():

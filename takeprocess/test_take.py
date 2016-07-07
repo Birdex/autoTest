@@ -1,47 +1,52 @@
 # -*- coding: utf-8 -*-
 import json
 import time
-from birdex_v2.IO import read
-from birdex_v2.localTime import localTimeNum
-from birdex_v2.requestMethod import post
+from birdexv2.IO import read
+from birdexv2.local_time import localTimeNum
+from birdexv2.request_method import post
 
 
-def setUp():
-    """带清点的揽收单，上传揽收结果success，清点结果fail"""
+def setup():
     time.sleep(0.5)
-# 需要清点的揽收单，揽收成功，清点失败
-def testFunc1():
+
+
+# 揽收成功，揽收清点成功
+def testFunc():
+    # 读取揽收和揽收结果数据格式
     dict_takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
     report = read('D:/workspace/BirdexTest/report.txt')
-    time.sleep(0.5)
+    # 设置参数具体值
     dict_takeOrder['procTK']['express']['no'] = 'XST' + str(localTimeNum())
+    # dict_upResult['parcels'] = dict_takeOrder['procTK']['parcels']
+    # print(json.dumps(dict_upResult,ensure_ascii=False,indent=2))
     dict_takeOrder['isCount'] = True
     postResult = post(json.dumps(dict_takeOrder))
     print("Take result:", postResult)
     dict_postResult = json.loads(postResult)
     if ('orderNo' in postResult) & (dict_postResult['result'] == 'success'):
         report['resultBasic']['omsOrderNo'] = dict_postResult['orderNo']
-        # 揽收成功
         report['resultBasic']['result'] = 'success'
         time.sleep(0.1)
         postResult = post(json.dumps(report), ip='192.168.1.197:8080', path='/OmsAgent/TakeReport/')
         print("TakeReport result:", postResult)
         dict_postResult = json.loads(postResult)
         if dict_postResult['result'] == 'success':
-            # 揽收清点失败
-            report['resultBasic']['result'] = 'fail'
             time.sleep(0.1)
             postResult = post(json.dumps(report), ip='192.168.1.197:8080', path='/OmsAgent/TakingCountingReport/')
             print("TakeCountReport result:", postResult)
             dict_postResult = json.loads(postResult)
-            assert dict_postResult['result'] == 'success'
+            if dict_postResult['result'] == 'success':
+                assert True
+            else:
+                print("TakeCountReport fail")
+                assert False
         else:
-            print("TakeReport sure return success")
+            print("TakeReport fail")
             assert False
     else:
         print("TakeCreate fail")
         assert False
 
-def tearDown():
-    print("Test end")
 
+def teardown():
+    print("Test end")
