@@ -68,15 +68,23 @@ def executeBatchTake(take_list):
         takeOrder["procTK"]["express"]["no"] = myOrderNum()
         postResult = json.loads(post(json.dumps(takeOrder)))
         print("postResult:" + json.dumps(postResult, ensure_ascii=False))
-        writeTXT(json.dumps(postResult))
-        order_no = postResult['orderNo']
+        writeTXT(json.dumps(postResult, ensure_ascii=False))
         result = postResult['result']
+        if 'orderNo' in postResult:
+            order_no = postResult['orderNo']
+        else:
+            order_no = None
+        if 'errorMsg' in postResult:
+            error_msg = postResult['errorMsg']
+        else:
+            error_msg = None
         db = pg_driver.connect(database="postgres", user="postgres", password="password", host="localhost", port="5432")
         db.execute('''create table IF NOT EXISTS take_result(
             "takeNo" varchar(32), 
-            "result" text, 
+            "result" text,
+            "errorMsg" text,
             "takeReportResult" varchar(32), 
             "takeReportMsg" text)''')
-        ps = db.prepare("insert into take_result values ($1,$2)")
-        ps(order_no, result)
+        ps = db.prepare("insert into take_result values ($1,$2,$3)")
+        ps(order_no, result, error_msg)
     db.close()
