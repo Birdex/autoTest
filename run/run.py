@@ -13,5 +13,9 @@ from birdexv2.local_time import myOrderNum, localTimeNum
 from birdexv2.batch_take import takeXLS, executeBatchTake
 
 # 批量预报单
-takeList = takeXLS()
-executeBatchTake(takeList)
+take_list = takeXLS(fileName='D:/pairs/take.xlsx')
+# print(take_list[169])
+# print(take_list[170])
+# print(take_list[171])
+
+executeBatchTake(take_list)

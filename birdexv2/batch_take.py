@@ -3,7 +3,6 @@ import json
 import postgresql.driver as pg_driver
 import xlrd
 
-
 from birdexv2.IO import read, writeTXT
 from birdexv2.local_time import myOrderNum
 from birdexv2.request_method import post
@@ -21,6 +20,7 @@ def readCell(cell):
             return False
     else:
         return cell.value
+
 
 def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xlsx'):
     xls = xlrd.open_workbook(fileName)
@@ -63,28 +63,35 @@ def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xl
         # print(takeOrder)
     return take_list
 
+
 def executeBatchTake(take_list):
-    for takeOrder in take_list:
+    for i, takeOrder in enumerate(take_list):
         takeOrder["procTK"]["express"]["no"] = myOrderNum()
         postResult = json.loads(post(json.dumps(takeOrder)))
-        print("postResult:" + json.dumps(postResult, ensure_ascii=False))
-        writeTXT(json.dumps(postResult, ensure_ascii=False))
-        result = postResult['result']
-        if 'orderNo' in postResult:
-            order_no = postResult['orderNo']
+        print('case%d:' % (i+1) + json.dumps(postResult, ensure_ascii=False))
+        writeTXT('case%d:' % (i+1) + json.dumps(postResult, ensure_ascii=False))
+        if 'result' in postResult:
+            result = postResult['result']
+            if 'orderNo' in postResult:
+                order_no = postResult['orderNo']
+            else:
+                order_no = None
+            if 'errorMsg' in postResult:
+                error_msg = postResult['errorMsg']
+            else:
+                error_msg = None
         else:
-            order_no = None
-        if 'errorMsg' in postResult:
-            error_msg = postResult['errorMsg']
-        else:
-            error_msg = None
+            result = 'error'
+            order_no = 'error'
+            error_msg = 'error'
         db = pg_driver.connect(database="postgres", user="postgres", password="password", host="localhost", port="5432")
         db.execute('''create table IF NOT EXISTS take_result(
-            "takeNo" varchar(32), 
-            "result" text,
-            "errorMsg" text,
-            "takeReportResult" varchar(32), 
-            "takeReportMsg" text)''')
+                "takeNo" varchar(32),
+                "result" text,
+                "errorMsg" text,
+                "takeReportResult" varchar(32),
+                "takeReportMsg" text)''')
         ps = db.prepare("insert into take_result values ($1,$2,$3)")
         ps(order_no, result, error_msg)
-    db.close()
+        db.close()
+
