@@ -45,7 +45,7 @@ TKdict = {
                 },
                 'items': [
                     {
-                        'count': 300,
+                        'count': 123,
                         'ext': {
                             'batch': '100',
                             'brand': 'string',
@@ -61,7 +61,7 @@ TKdict = {
                         'mCategory': 'string',
                         'mCode': '05120400370201',
                         'mName': 'FisherPrice 费雪 声光安抚费雪小海马',
-                        'price': 79.00,
+                        'price': 88,
                         'priceUnit': 'string'
                     }
                 ],

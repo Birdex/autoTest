@@ -13,7 +13,7 @@ def post(params, ip='192.168.1.197:8080', path='/OmsMaster/Taking/'):
         return reponse.read().decode(encoding='utf-8', errors='strict')
     else:
         print(reponse.read())
-        return {'request or reponse error'}
+        return '''{"error":"clientError"}'''
     conn.close()
 
 
@@ -28,7 +28,7 @@ def get(params, ip='192.168.1.197:8080', path='/OmsMaster/Taking/'):
         return reponse.read().decode(encoding='utf-8', errors='strict')
     else:
         print(reponse.read())
-        return {'serverError': 'serverBug'}
+        return '''{"error":"clientError"}'''
     conn.close()
 
 
@@ -44,7 +44,7 @@ def put(params, orderNo, ip='192.168.1.197:8080', path='/OmsMaster/Taking/'):
         return reponse.read().decode(encoding='utf-8', errors='strict')
     else:
         print(reponse.read())
-        return {'serverError': 'serverBug'}
+        return '''{"error":"clientError"}'''
     conn.close()
 
 

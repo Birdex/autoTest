@@ -3,7 +3,6 @@ import json
 import postgresql.driver as pg_driver
 import xlrd
 
-
 from birdexv2.IO import read, writeTXT
 from birdexv2.local_time import myOrderNum
 from birdexv2.request_method import post
@@ -22,6 +21,7 @@ def readCell(cell):
     else:
         return cell.value
 
+
 def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xlsx'):
     xls = xlrd.open_workbook(fileName)
     try:
@@ -29,9 +29,9 @@ def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xl
     except:
         print("no sheet in %s named Sheet1" % fileName)
     row_num = sheet.nrows
-    ncols = sheet.ncols
-    print("row_num %d, ncols %d" % (row_num, ncols))
-    takeList = []
+    col_num = sheet.ncols
+    print("row_num %d, ncols %d" % (row_num, col_num))
+    take_list = []
     takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
 
     for i in range(1, row_num):
@@ -59,24 +59,39 @@ def takeXLS(fileName='D:/PycharmProjects/BirdexTestForPython/birdexv2/TKOrder.xl
         takeOrder['procTK']['person']['contact']['ext']['note'] = readCell(sheet.cell(i, 21))
         takeOrder['procTK']['person']['contact']['identityCard'] = readCell(sheet.cell(i, 22))
         takeOrder['procTK']['person']['name'] = readCell(sheet.cell(i, 23))
-        takeList.append(copy.deepcopy(takeOrder))
+        take_list.append(copy.deepcopy(takeOrder))
         # print(takeOrder)
-    return takeList
+    return take_list
+
 
 def executeBatchTake(take_list):
-    for takeOrder in take_list:
+    for i, takeOrder in enumerate(take_list):
         takeOrder["procTK"]["express"]["no"] = myOrderNum()
         postResult = json.loads(post(json.dumps(takeOrder)))
-        print("postResult:" + json.dumps(postResult, ensure_ascii=False))
-        writeTXT(json.dumps(postResult))
-        orderNo = postResult['orderNo']
-        result = postResult['result']
+        print('case%d:' % (i+1) + json.dumps(postResult, ensure_ascii=False))
+        writeTXT('case%d:' % (i+1) + json.dumps(postResult, ensure_ascii=False))
+        if 'result' in postResult:
+            result = postResult['result']
+            if 'orderNo' in postResult:
+                order_no = postResult['orderNo']
+            else:
+                order_no = None
+            if 'errorMsg' in postResult:
+                error_msg = postResult['errorMsg']
+            else:
+                error_msg = None
+        else:
+            result = 'error'
+            order_no = 'error'
+            error_msg = 'error'
         db = pg_driver.connect(database="postgres", user="postgres", password="password", host="localhost", port="5432")
         db.execute('''create table IF NOT EXISTS take_result(
-            "takeNo" varchar(32), 
-            "result" text, 
-            "takeReportResult" varchar(32), 
-            "takeReportMsg" text)''')
-        ps = db.prepare("insert into take_result values ($1,$2)")
-        ps(orderNo, result)
-    db.close()
+                "takeNo" varchar(32),
+                "result" text,
+                "errorMsg" text,
+                "takeReportResult" varchar(32),
+                "takeReportMsg" text)''')
+        ps = db.prepare("insert into take_result values ($1,$2,$3)")
+        ps(order_no, result, error_msg)
+        db.close()
+

@@ -9,7 +9,7 @@ from birdexv2.request_method import post
 def setUp():
     # 揽收单isCount，揽收失败fail，揽收清点操作fail
     time.sleep(0.5)
-def Testfunc3():
+def testFunc3():
     # 读取揽收和揽收结果数据格式
     dict_takeOrder = read('D:/workspace/BirdexTest/TKOrderSchema.txt')
     report = read('D:/workspace/BirdexTest/report.txt')
